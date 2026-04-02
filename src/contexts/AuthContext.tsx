@@ -1,5 +1,6 @@
 import React from 'react'
 import {createContext, useContext, useState} from 'react'
+import {useNavigate} from "react-router-dom";
 
 export type LoginFormValues = {
   email: string;
@@ -38,21 +39,26 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({ isAuthenticated: false, user: null });
+  const navigate  = useNavigate()
 
   const login = (data: LoginFormValues) => {
     // Simulate login - in real app, make API call
     console.log('Logging in with:', data);
     setAuthState({ isAuthenticated: true, user: { email: data.email } });
+    navigate("/")
+
   };
 
   const register = (data: RegisterFormValues) => {
     // Simulate register - in real app, make API call
     console.log('Registering with:', data);
     setAuthState({ isAuthenticated: true, user: { name: data.name, email: data.email } });
+    navigate("/")
   };
 
   const logout = () => {
     setAuthState({ isAuthenticated: false, user: null });
+    navigate("/login")
   };
 
   return (

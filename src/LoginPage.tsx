@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -13,12 +14,9 @@ const loginSchema = z.object({
     password: z.string().min(6, "Password must be at least 6 characters"),
 })
 
-interface LoginPageProps {
-    onGoToRegister: () => void
-}
-
-export const LoginPage = ({ onGoToRegister }: LoginPageProps) => {
+export const LoginPage = () => {
     const { login } = useAuth()
+    const navigate = useNavigate()
     const {
         register,
         handleSubmit,
@@ -79,7 +77,7 @@ export const LoginPage = ({ onGoToRegister }: LoginPageProps) => {
                             No account?{" "}
                             <button
                                 type="button"
-                                onClick={onGoToRegister}
+                                onClick={() => navigate("/register")}
                                 className="underline hover:text-foreground"
                             >
                                 Register
