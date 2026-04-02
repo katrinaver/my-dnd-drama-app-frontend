@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React from 'react'
+import {createContext, useContext, useState} from 'react'
 
 export type LoginFormValues = {
   email: string;
@@ -35,7 +36,7 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [authState, setAuthState] = useState<AuthState>({ isAuthenticated: false, user: null });
 
   const login = (data: LoginFormValues) => {
@@ -56,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={{ ...authState, login, register, logout }}>
-      { children }
+      {children}
     </AuthContext.Provider>
   );
 };
