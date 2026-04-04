@@ -13,6 +13,7 @@ const registerSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.string().email("Invalid email"),
     password: z.string().min(6, "Password must be at least 6 characters"),
+    role: z.enum(["player", "master"]),
 })
 
 export const RegisterPage = () => {
@@ -39,7 +40,7 @@ export const RegisterPage = () => {
         <div className="flex min-h-screen items-center justify-center">
             <Card className="w-[380px]">
                 <CardHeader>
-                    <CardTitle>Join the DnD Tavern</CardTitle>
+                    <CardTitle>Join the my dnd app</CardTitle>
                 </CardHeader>
 
                 <CardContent>
@@ -48,11 +49,12 @@ export const RegisterPage = () => {
                         <div className="space-y-1">
                             <Input
                                 type="text"
-                                placeholder="Your hero name"
+                                placeholder="Your name"
+                                data-testid="name-input"
                                 {...register("name")}
                             />
                             {errors.name && (
-                                <p className="text-sm text-red-500">
+                                <p data-testid="name-error" className="text-sm text-red-500">
                                     {errors.name.message}
                                 </p>
                             )}
@@ -61,11 +63,12 @@ export const RegisterPage = () => {
                         <div className="space-y-1">
                             <Input
                                 type="email"
-                                placeholder="hero@tavern.com"
+                                placeholder="insane@mail.com"
+                                data-testid="email-input"
                                 {...register("email")}
                             />
                             {errors.email && (
-                                <p className="text-sm text-red-500">
+                                <p data-testid="email-error" className="text-sm text-red-500">
                                     {errors.email.message}
                                 </p>
                             )}
@@ -75,16 +78,17 @@ export const RegisterPage = () => {
                             <Input
                                 type="password"
                                 placeholder="••••••••"
+                                data-testid="password-input"
                                 {...register("password")}
                             />
                             {errors.password && (
-                                <p className="text-sm text-red-500">
+                                <p data-testid="password-error" className="text-sm text-red-500">
                                     {errors.password.message}
                                 </p>
                             )}
                         </div>
 
-                        <Button type="submit" className="w-full">
+                        <Button data-testid="submit-button" type="submit" className="w-full">
                             Create Hero
                         </Button>
 
@@ -93,6 +97,7 @@ export const RegisterPage = () => {
                             <button
                                 type="button"
                                 onClick={() => navigate("/login")}
+                                data-testid="open-login-page-button"
                                 className="underline hover:text-foreground"
                             >
                                 Login

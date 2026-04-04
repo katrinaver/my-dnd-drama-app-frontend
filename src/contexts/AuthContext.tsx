@@ -2,6 +2,8 @@ import React from 'react'
 import {createContext, useContext, useState} from 'react'
 import {useNavigate} from "react-router-dom";
 
+export type Role = 'player' | 'master'
+
 export type LoginFormValues = {
   email: string;
   password: string;
@@ -11,11 +13,13 @@ export type RegisterFormValues = {
   name: string;
   email: string;
   password: string;
+  role: Role;
 };
 
 interface User {
   name?: string;
   email: string;
+  role?: Role;
 }
 
 interface AuthState {
@@ -44,7 +48,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
   const login = (data: LoginFormValues) => {
     // Simulate login - in real app, make API call
     console.log('Logging in with:', data);
-    setAuthState({ isAuthenticated: true, user: { email: data.email } });
+    setAuthState({ isAuthenticated: true, user: {email: data.email} });
     navigate("/")
 
   };
@@ -52,7 +56,7 @@ export const AuthProvider: React.FC<{children: React.ReactNode}> = ({ children }
   const register = (data: RegisterFormValues) => {
     // Simulate register - in real app, make API call
     console.log('Registering with:', data);
-    setAuthState({ isAuthenticated: true, user: { name: data.name, email: data.email } });
+    setAuthState({ isAuthenticated: true, user: { name: data.name, email: data.email, role: data.role}});
     navigate("/")
   };
 

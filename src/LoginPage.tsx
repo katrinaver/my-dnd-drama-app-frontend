@@ -15,7 +15,7 @@ const loginSchema = z.object({
 })
 
 export const LoginPage = () => {
-    const { login } = useAuth()
+    const {login} = useAuth()
     const navigate = useNavigate()
     const {
         register,
@@ -37,7 +37,7 @@ export const LoginPage = () => {
         <div className="flex min-h-screen items-center justify-center">
             <Card className="w-[380px]">
                 <CardHeader>
-                    <CardTitle>Login to DnD Tavern</CardTitle>
+                    <CardTitle>Login to my dnd app</CardTitle>
                 </CardHeader>
 
                 <CardContent>
@@ -46,11 +46,12 @@ export const LoginPage = () => {
                         <div className="space-y-1">
                             <Input
                                 type="email"
-                                placeholder="hero@tavern.com"
+                                data-testid="email-input"
+                                placeholder="insane@mail.com"
                                 {...register("email")}
                             />
                             {errors.email && (
-                                <p className="text-sm text-red-500">
+                                <p data-testid="error" className="text-sm text-red-500">
                                     {errors.email.message}
                                 </p>
                             )}
@@ -60,23 +61,29 @@ export const LoginPage = () => {
                             <Input
                                 type="password"
                                 placeholder="••••••••"
+                                data-testid="password-input"
                                 {...register("password")}
                             />
                             {errors.password && (
-                                <p className="text-sm text-red-500">
+                                <p data-testid="error" className="text-sm text-red-500">
                                     {errors.password.message}
                                 </p>
                             )}
                         </div>
 
-                        <Button type="submit" className="w-full">
-                            Enter the Tavern
+                        <Button
+                            data-testid="login-button"
+                            type="submit"
+                            className="w-full"
+                        >
+                            Log in
                         </Button>
 
                         <p className="text-center text-sm text-muted-foreground">
                             No account?{" "}
                             <button
                                 type="button"
+                                data-testid="open-register-page-button"
                                 onClick={() => navigate("/register")}
                                 className="underline hover:text-foreground"
                             >

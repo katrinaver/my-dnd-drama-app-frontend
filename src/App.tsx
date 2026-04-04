@@ -7,9 +7,14 @@ import { CampaignsPage } from "./pages/CampaignsPage"
 import { SettingsPage } from "./pages/SettingsPage"
 import { CreateCampaignPage } from "./pages/CreateCampaignPage"
 import { DndRulesPage } from "./pages/DndRulesPage"
+import {PresetPage} from "@/pages/PresetPage.tsx";
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-    const { isAuthenticated } = useAuth()
+const ProtectedRoute = ({ children, allowedRole }: { children: React.ReactNode, allowedRole?: 'master' | 'player'}) => {
+    const { isAuthenticated, user} = useAuth()
+    if (allowedRole && user?.role !== allowedRole) {
+        // add fallback page
+        return null
+    }
     return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
 }
 
@@ -27,9 +32,18 @@ export const App = () => {
                 }
             >
                 <Route index element={<Navigate to="campaigns" replace />} />
+                <Route path="preset-page" element={
+                    <ProtectedRoute allowedRole={"master"}>
+                        <PresetPage />
+                    </ProtectedRoute>
+                } />
                 <Route path="campaigns" element={<CampaignsPage />} />
                 <Route path="settings" element={<SettingsPage />} />
-                <Route path="create-campaign" element={<CreateCampaignPage />} />
+                <Route path="create-campaign" element={
+                    <ProtectedRoute allowedRole={"master"}>
+                        <CreateCampaignPage />
+                    </ProtectedRoute>
+                } />
                 <Route path="dnd-rules" element={<DndRulesPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />

@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useLocation } from "react-router-dom"
-import { BookOpen, BookMarked, PlusCircle, Settings, Sword } from "lucide-react"
+import { BookOpen, BookMarked, PlusCircle, Settings, Sword, UserRoundCog } from "lucide-react"
 import {
     Sidebar,
     SidebarContent,
@@ -14,20 +14,41 @@ import {
     SidebarProvider,
     SidebarTrigger,
 } from "@/components/ui/sidebar"
+import {useAuth} from "@/contexts/AuthContext.tsx"
+import {useMemo} from "react"
+
+
+const AppRoutes = {
+    Campaigns: "/campaigns",
+    Create_campaign: "/create-campaign",
+    Dnd_rules: "/dnd-rules",
+    Settings: "/settings",
+    Preset_page: "/preset-page",
+    Home: "/",
+}
 
 const navItems = [
-    { to: "/campaigns", label: "Campaigns", icon: BookOpen },
-    { to: "/create-campaign", label: "Create Campaign", icon: PlusCircle },
-    { to: "/dnd-rules", label: "D&D Rules", icon: Sword },
-    { to: "/settings", label: "Settings", icon: Settings },
+    { to: AppRoutes.Campaigns, label: "Campaigns", icon: BookOpen },
+    { to: AppRoutes.Create_campaign, label: "Create Campaign", icon: PlusCircle },
+    { to: AppRoutes.Dnd_rules, label: "D&D Rules", icon: Sword },
+    { to: AppRoutes.Settings, label: "Settings", icon: Settings },
+    { to: AppRoutes.Preset_page, label: "Presets", icon: UserRoundCog},
 ]
+
 
 const SidebarNav = () => {
     const { pathname } = useLocation()
+    const {user} = useAuth()
+    const isMaster = user?.role === "master"
+    const allowedNavItems = useMemo(() => (
+            isMaster
+                ? navItems
+                : navItems.filter(item => item.to !== AppRoutes.Preset_page && item.to !== AppRoutes.Create_campaign)
+    ), [isMaster])
 
     return (
         <SidebarMenu>
-            {navItems.map(({ to, label, icon: Icon }) => (
+            {allowedNavItems.map(({ to, label, icon: Icon }) => (
                 <SidebarMenuItem key={to}>
                     <SidebarMenuButton asChild isActive={pathname === to}>
                         <NavLink to={to}>
@@ -48,7 +69,7 @@ export const HomePage = () => {
                 <SidebarHeader>
                     <div className="flex items-center gap-2 px-2 py-1">
                         <BookMarked className="size-5" />
-                        <span className="font-semibold text-sm">DnD Tavern</span>
+                        <span className="font-semibold text-sm">DnD App</span>
                     </div>
                 </SidebarHeader>
                 <SidebarContent>
