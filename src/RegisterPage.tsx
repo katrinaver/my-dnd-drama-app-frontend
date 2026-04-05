@@ -58,20 +58,17 @@ export const RegisterPage = () => {
 
                         <div className="space-y-1">
                             <Input
+                                required
                                 type="text"
                                 placeholder="Your name"
                                 data-testid="name-input"
                                 {...register("name")}
                             />
-                            {errors.name && (
-                                <p data-testid="name-error" className="text-sm text-red-500">
-                                    {errors.name.message}
-                                </p>
-                            )}
                         </div>
 
                         <div className="space-y-1">
                             <Input
+                                required
                                 type="email"
                                 placeholder="insane@mail.com"
                                 data-testid="email-input"
@@ -86,16 +83,12 @@ export const RegisterPage = () => {
 
                         <div className="space-y-1">
                             <Input
+                                required
                                 type="password"
                                 placeholder="••••••••"
                                 data-testid="password-input"
                                 {...register("password")}
                             />
-                            {errors.password && (
-                                <p data-testid="password-error" className="text-sm text-red-500">
-                                    {errors.password.message}
-                                </p>
-                            )}
                         </div>
                         <div className="space-y-1">
                             <Controller

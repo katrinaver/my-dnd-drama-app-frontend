@@ -45,6 +45,7 @@ export const LoginPage = () => {
 
                         <div className="space-y-1">
                             <Input
+                                required
                                 type="email"
                                 data-testid="email-input"
                                 placeholder="insane@mail.com"
@@ -59,16 +60,12 @@ export const LoginPage = () => {
 
                         <div className="space-y-1">
                             <Input
+                                required
                                 type="password"
                                 placeholder="••••••••"
                                 data-testid="password-input"
                                 {...register("password")}
                             />
-                            {errors.password && (
-                                <p data-testid="error" className="text-sm text-red-500">
-                                    {errors.password.message}
-                                </p>
-                            )}
                         </div>
 
                         <Button
