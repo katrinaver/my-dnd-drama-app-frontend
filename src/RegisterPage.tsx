@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form"
+import { useForm , Controller} from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth, type RegisterFormValues } from "./contexts/AuthContext"
+import {Checkbox} from "@/components/ui/checkbox.tsx";
+import { cn } from "@/lib/utils"
 
 const registerSchema = z.object({
     name: z.string().min(1, "Name is required"),
@@ -16,19 +18,27 @@ const registerSchema = z.object({
     role: z.enum(["player", "master"]),
 })
 
+const roles = [
+    { id: "player", title: "Player", desc: "Join campaigns" },
+    { id: "master", title: "Dungeon Master", desc: "Create and manage campaigns" },
+]
+
+
 export const RegisterPage = () => {
-    const { register: registerUser } = useAuth()
+    const {register: registerUser} = useAuth()
     const navigate = useNavigate()
     const {
+        control,
         register,
         handleSubmit,
-        formState: { errors },
+        formState: {errors},
     } = useForm<RegisterFormValues>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
             name: "",
             email: "",
             password: "",
+            role: "player",
         },
     })
 
@@ -86,6 +96,39 @@ export const RegisterPage = () => {
                                     {errors.password.message}
                                 </p>
                             )}
+                        </div>
+                        <div className="space-y-1">
+                            <Controller
+                                name="role"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="space-y-4">
+                                        {roles.map((role) => {
+                                            const checked = field.value === role.id
+
+                                            return (
+                                                <Card
+                                                    key={role.id}
+                                                    onClick={() => field.onChange(role.id)}
+                                                    className={cn(
+                                                        "cursor-pointer transition",
+                                                        checked && "border-primary"
+                                                    )}
+                                                >
+                                                    <div className="flex justify-between items-center gap-4">
+                                                            <p className="font-medium">{role.title}</p>
+                                                        <Checkbox
+                                                            checked={checked}
+                                                            onCheckedChange={() => field.onChange(role.id)}
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        />
+                                                    </div>
+                                                </Card>
+                                            )
+                                        })}
+                                    </div>
+                                )}
+                            />
                         </div>
 
                         <Button data-testid="submit-button" type="submit" className="w-full">

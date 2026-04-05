@@ -15,4 +15,5 @@ export type CampaignFormTypePlayer = {
     characterForm: any;
     publicMaterial: string[];
     myNotices: string;
+    rules: string[];
 };
