@@ -3,6 +3,7 @@ import { useAuth } from "./contexts/AuthContext"
 import { HomePage } from "./HomePage"
 import { LoginPage } from "./LoginPage"
 import { RegisterPage } from "./RegisterPage"
+import { ForgotPasswordPage } from "./ForgotPasswordPage"
 import { CampaignsPage } from "./pages/CampaignsPage"
 import { SettingsPage } from "./pages/SettingsPage"
 import { CreateCampaignPage } from "./pages/CreateCampaignPage"
@@ -10,7 +11,8 @@ import { DndRulesPage } from "./pages/DndRulesPage"
 import {PresetPage} from "@/pages/PresetPage.tsx";
 
 const ProtectedRoute = ({ children, allowedRole }: { children: React.ReactNode, allowedRole?: 'master' | 'player'}) => {
-    const { isAuthenticated, user} = useAuth()
+    const { isAuthenticated, user, loading} = useAuth()
+    if (loading) return null
     if (allowedRole && user?.role !== allowedRole) {
         // add fallback page
         return null
@@ -23,6 +25,7 @@ export const App = () => {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route
                 path="/"
                 element={

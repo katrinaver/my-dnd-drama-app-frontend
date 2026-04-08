@@ -1,5 +1,6 @@
 import { useForm , Controller} from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "react-router-dom"
@@ -27,6 +28,7 @@ const roles = [
 export const RegisterPage = () => {
     const {register: registerUser} = useAuth()
     const navigate = useNavigate()
+    const [apiError, setApiError] = useState("")
     const {
         control,
         register,
@@ -42,8 +44,14 @@ export const RegisterPage = () => {
         },
     })
 
-    const onSubmit: SubmitHandler<RegisterFormValues> = (data) => {
-        registerUser(data)
+    const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
+        setApiError("")
+        try {
+            await registerUser(data)
+            navigate("/login")
+        } catch (error) {
+            setApiError(error instanceof Error ? error.message : "Registration failed")
+        }
     }
 
     return (
@@ -127,6 +135,9 @@ export const RegisterPage = () => {
                         <Button data-testid="submit-button" type="submit" className="w-full">
                             Create Hero
                         </Button>
+                        {apiError && (
+                            <p className="text-sm text-red-500 text-center">{apiError}</p>
+                        )}
 
                         <p className="text-center text-sm text-muted-foreground">
                             Already have an account?{" "}

@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form"
 import type { SubmitHandler } from "react-hook-form"
+import { useState } from "react"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "react-router-dom"
@@ -17,6 +18,7 @@ const loginSchema = z.object({
 export const LoginPage = () => {
     const {login} = useAuth()
     const navigate = useNavigate()
+    const [apiError, setApiError] = useState("")
     const {
         register,
         handleSubmit,
@@ -29,8 +31,13 @@ export const LoginPage = () => {
         },
     })
 
-    const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
-        login(data)
+    const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
+        setApiError("")
+        try {
+            await login(data)
+        } catch (error) {
+            setApiError(error instanceof Error ? error.message : "Login failed")
+        }
     }
 
     return (
@@ -75,6 +82,9 @@ export const LoginPage = () => {
                         >
                             Log in
                         </Button>
+                        {apiError && (
+                            <p className="text-sm text-red-500 text-center">{apiError}</p>
+                        )}
 
                         <p className="text-center text-sm text-muted-foreground">
                             No account?{" "}
@@ -85,6 +95,16 @@ export const LoginPage = () => {
                                 className="underline hover:text-foreground"
                             >
                                 Register
+                            </button>
+                        </p>
+                        <p className="text-center text-sm text-muted-foreground">
+                            Forgot password?{" "}
+                            <button
+                                type="button"
+                                onClick={() => navigate("/forgot-password")}
+                                className="underline hover:text-foreground"
+                            >
+                                Reset
                             </button>
                         </p>
 
